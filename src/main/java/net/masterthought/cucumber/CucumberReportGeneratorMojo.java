@@ -39,6 +39,24 @@ public class CucumberReportGeneratorMojo extends AbstractMojo {
      */
     private File cucumberOutput;
 
+	/**
+	 * Skipped fails
+	 * 
+	 * @parameter expression="false"
+	 * @required
+	 */
+
+	private Boolean skippedFails = false;
+
+	/**
+	 * Undefined fails
+	 * 
+	 * @parameter expression="false"
+	 * @required
+	 */
+
+	private Boolean undefinedFails = false;
+
     /**
      * Enable Flash Charts.
      *
@@ -47,7 +65,26 @@ public class CucumberReportGeneratorMojo extends AbstractMojo {
      */
     private Boolean enableFlashCharts;
 
+    
+    /**
+     * Enable HighCharts.
+     *
+     * @parameter expression="true"
+     * @required
+     */
+    private boolean highCharts = false;
+    
+    /**
+     * Break the build on tests failure.
+     *
+     * @parameter expression="true"
+     * @required
+     */
+    private boolean testFailureIgnore = false;
+    
+    
     public void execute() throws MojoExecutionException {
+    	
         if (!outputDirectory.exists()) {
             outputDirectory.mkdirs();
         }
@@ -57,13 +94,19 @@ public class CucumberReportGeneratorMojo extends AbstractMojo {
         ReportBuilder reportBuilder;
 
         try {
-            System.out.println("About to generate");
-            reportBuilder = new ReportBuilder(list, outputDirectory, "", "1", projectName, false, false, enableFlashCharts, false, false, "");
+        	getLog().info("About to generate");
+        	
+            reportBuilder = new ReportBuilder(list, outputDirectory, "", "1", projectName, skippedFails, undefinedFails, enableFlashCharts, false, false, "", highCharts);
             reportBuilder.generateReports();
 
             boolean buildResult = reportBuilder.getBuildStatus();
             if (!buildResult) {
-                throw new MojoExecutionException("BUILD FAILED - Check Report For Details");
+                if (testFailureIgnore) {
+                	getLog().warn("Cucumber Tests FAILED - Check Report For Details");
+                	getLog().error("There are test failures.");
+                } else {
+                	throw new MojoExecutionException("BUILD FAILED - Check Report For Details");
+            	}
             }
 
         } catch (Exception e) {
