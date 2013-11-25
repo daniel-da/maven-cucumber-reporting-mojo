@@ -13,13 +13,6 @@
         <version>7</version>
     </parent>
 
-    <repositories>
-        <repository>
-            <id>repo.bodar.com</id>
-            <url>http://repo.bodar.com</url>
-        </repository>
-    </repositories>
-
     <scm>
         <connection>scm:git:git@github.com:masterthought/maven-cucumber-reporting-mojo.git</connection>
         <developerConnection>scm:git:git@github.com:masterthought/maven-cucumber-reporting-mojo.git
@@ -122,12 +115,7 @@
         <dependency>
             <groupId>net.masterthought</groupId>
             <artifactId>cucumber-reporting</artifactId>
-            <version>0.0.20</version>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.totallylazy</groupId>
-            <artifactId>totallylazy</artifactId>
-            <version>991</version>
+            <version>0.0.22-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
